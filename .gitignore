@@ -1,3 +1,6 @@
 /dist
 chat.md
 chat.cursor_rules
+notebooks
+uploads
+.env
