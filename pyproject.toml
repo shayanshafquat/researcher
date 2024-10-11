@@ -7,7 +7,21 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-
+fastapi = "^0.100.0"
+uvicorn = "^0.21.1"
+pydantic = "^2.0.0"
+sqlalchemy = "^2.0.0"
+asyncpg = "^0.27.0"
+python-multipart = "^0.0.6"
+together = "^0.2.0"
+unstructured = "^0.7.0"
+langchain = "^0.0.267"  # Updated to a version compatible with pydantic v2
+pinecone-client = "^2.2.1"
+faiss-cpu = "^1.7.3"
+openai = "^0.27.0"
+sentence-transformers = "^3.2.0"
+python-dotenv = "^1.0.1"
+streamlit = "^1.39.0"
 
 [build-system]
 requires = ["poetry-core"]
