@@ -3,3 +3,5 @@ chat.md
 chat.cursor_rules
 uploads
 .env
+notebooks
+faiss_index.bin

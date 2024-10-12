@@ -1,31 +1,29 @@
 import os
 from typing import List
-import faiss
+from langchain.vectorstores import FAISS
 import numpy as np
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.embeddings import OpenAIEmbeddings
+from dotenv import load_dotenv
 
-embeddings = HuggingFaceEmbeddings()
+load_dotenv()
 
-INDEX_FILE = "faiss_index.bin"
+embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
 
-def create_or_load_index(dimension: int):
-    if os.path.exists(INDEX_FILE):
-        index = faiss.read_index(INDEX_FILE)
+index_file = "faiss_index.bin"
+
+def create_or_load_index(chunks: List[str], index_file: str):
+    if os.path.exists(index_file):
+        index = FAISS.load_local(index_file, embeddings)
     else:
-        index = faiss.IndexFlatL2(dimension)
+        index = FAISS.from_texts(chunks, embeddings)
+        index.save_local(index_file)
     return index
 
-def save_index(index):
-    faiss.write_index(index, INDEX_FILE)
-
 async def store_chunks(chunks: List[str], metadata: dict):
-    vectors = [embeddings.embed(chunk) for chunk in chunks]
-    index = create_or_load_index(len(vectors[0]))
-    index.add(np.array(vectors, dtype=np.float32))
-    save_index(index)
+    index = create_or_load_index(chunks, index_file)
+    index.save_local(index_file)
 
 async def search_similar_chunks(query: str, k: int = 5):
-    query_vector = np.array([embeddings.embed(query)], dtype=np.float32)
-    index = create_or_load_index(query_vector.shape[1])
-    distances, indices = index.search(query_vector, k)
-    return indices
+    index = FAISS.load_local(index_file, embeddings)
+    similar_chunks = index.similarity_search(query, k=k)
+    return similar_chunks
