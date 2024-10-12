@@ -37,6 +37,7 @@ async def upload_document(file: UploadFile = File(...)):
         file_path = await save_uploaded_file(file)
         extracted_text = await extract_text(file_path)
         chunks = await chunk_text(extracted_text)
+        logger.info(f"Document chunking done: {file.filename}")
         await store_chunks(chunks, {"filename": file.filename})
         logger.info(f"Document uploaded and processed: {file.filename}")
         return {"filename": file.filename, "file_path": file_path, "num_chunks": len(chunks)}
