@@ -1,7 +1,8 @@
 /dist
 chat.md
 chat.cursor_rules
-uploads
+uploads/
 .env
 notebooks
 faiss_index.bin
+
