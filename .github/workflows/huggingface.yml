@@ -22,7 +22,7 @@ jobs:
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
-        git config --global user.email shafquat.shayan@gmail.com
-        git config --global user.name shayanshafquat
+        git config --global user.email "shafquat.shayan@gmail.com"
+        git config --global user.name "shayanshafquat"
         git remote add hf https://huggingface.co/spaces/neuralnavigators/RAG.git
         git push hf main --force
