@@ -24,5 +24,5 @@ jobs:
       run: |
         git config --global user.email "shafquat.shayan@gmail.com"
         git config --global user.name "shayanshafquat"
-        git remote add hf https://huggingface.co/spaces/neuralnavigators/RAG.git
+        git remote add hf https://huggingface.co/${{ secrets.HF_TOKEN }}@huggingface.co/spaces/neuralnavigators/RAG.git
         git push hf main --force
