@@ -7,7 +7,7 @@ import re
 import aiofiles
 from utils.text_processing import extract_text, chunk_text
 from utils.vector_store import store_chunks, search_similar_chunks
-from utils.rag_pipeline import answer_question
+from utils.rag_pipeline import answer_question, summarize_document, generate_queries
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -94,3 +94,27 @@ async def ask_question(query: str = Body(..., embed=True), index_path: str = Bod
     except Exception as e:
         logger.error(f"Error answering question: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error answering question: {str(e)}")
+
+@router.post("/summarize")
+async def summarize_document_route(index_path: str = Body(..., embed=True)):
+    try:
+        # Generate generic queries for scientific research papers
+        queries = await generate_queries()
+
+        # Retrieve chunks using multiple queries
+        all_chunks = []
+        for query in queries:
+            chunks = await search_similar_chunks(query, index_path, k=8)  # Adjust k as needed
+            all_chunks.extend(chunks)
+
+        # Remove duplicate chunks
+        unique_chunks = list({chunk.page_content: chunk for chunk in all_chunks}.values())
+
+        # Summarize the document using the retrieved chunks
+        summary = await summarize_document(unique_chunks)
+        return {"summary": summary}
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error summarizing document: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error summarizing document: {str(e)}")
