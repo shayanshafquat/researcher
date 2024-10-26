@@ -6,6 +6,7 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 
 - Upload PDF documents
 - Process document links, including arXiv papers
+- Summarize uploaded documents
 - Ask questions about uploaded documents
 - Utilizes OpenAI's GPT model for generating answers
 
@@ -16,6 +17,7 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 - Langchain: For document processing and vector storage
 - FAISS: Vector database for efficient similarity search
 - OpenAI API: For text embeddings and question answering
+- Poetry: For dependency management
 
 ## Setup
 
@@ -25,9 +27,9 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
    cd rag-based-qa-app
    ```
 
-2. Install dependencies:
+2. Install dependencies using Poetry:
    ```
-   pip install -r requirements.txt
+   poetry install
    ```
 
 3. Set up environment variables:
@@ -38,12 +40,12 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 
 4. Run the FastAPI backend:
    ```
-   uvicorn main:app --reload
+   poetry run uvicorn main:app --reload
    ```
 
 5. In a new terminal, run the Streamlit frontend:
    ```
-   streamlit run app.py
+   poetry run streamlit run app.py
    ```
 
 6. Open your browser and navigate to `http://localhost:8501` to use the application.
@@ -52,8 +54,17 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 
 1. Upload a document or paste a document link (including arXiv links).
 2. Wait for the document to be processed.
-3. Ask questions about the document in the provided text input.
-4. View the AI-generated answers based on the document's content.
+3. Click on "Summarize Document" to get an overview of the uploaded document.
+4. Ask questions about the document in the provided text input.
+5. View the AI-generated answers based on the document's content.
+
+## Application Interface
+
+### Document Upload and Summary
+![Document Upload and Summary](images/1.png)
+
+### Q&A Interface
+![Q&A Interface](images/2.png)
 
 ## Project Structure
 
@@ -64,6 +75,22 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
   - `vector_store.py`: FAISS vector store operations
   - `rag_pipeline.py`: Question answering logic
   - `text_processing.py`: Text extraction and chunking
+
+## Running with Docker
+
+1. Build the Docker image:
+   ```
+   docker build -t rag-qa-app .
+   ```
+
+2. Run the Docker container:
+   ```
+   docker run -p 8000:8000 -p 8501:8501 --env-file .env rag-qa-app
+   ```
+
+3. Access the application:
+   - FastAPI backend: `http://localhost:8000`
+   - Streamlit frontend: `http://localhost:8501`
 
 ## Contributing
 

@@ -59,7 +59,7 @@ if st.session_state.current_index_path:
         st.markdown(st.session_state.document_summary)
 
 # Chat interface
-st.header("Chat with the Document")
+st.header("Q&A with the Document")
 user_input = st.text_input("You:", key="user_input")
 
 if st.button("Send"):

@@ -51,7 +51,7 @@ async def summarize_document(chunks: List[Document]) -> str:
 
             Please provide a detailed summary based on the above instructions."""}
         ],
-        max_tokens=700  # Increased token limit for a more detailed summary
+        max_tokens=800  # Increased token limit for a more detailed summary
     )
     return response.choices[0]['message']['content']
 
