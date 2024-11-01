@@ -25,14 +25,14 @@ ENV PATH="${PATH}:/root/.local/bin"
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
+# Make ports available to the outside world
+EXPOSE 8000 8501
 
-# Make port 8501 available to the world outside this container
-EXPOSE 8501
-
-# Create a script to run both FastAPI and Streamlit
+# Create a script to load environment variables and run both FastAPI and Streamlit
 RUN echo '#!/bin/bash\n\
+set -a  # Automatically export all variables\n\
+source .env  # Load variables from .env file\n\
+set +a  # Stop auto-exporting\n\
 uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
 streamlit run app.py --server.port 8501 --server.address 0.0.0.0\n'\
 > /app/start.sh
