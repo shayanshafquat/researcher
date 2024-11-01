@@ -1,0 +1,162 @@
+/* General page styling */
+.stApp {
+    background-color: #1e1e2f;
+    color: #dcdcdc;
+}
+
+.stSidebar {
+    background-color: #2b2b3d;
+}
+
+.stSidebar h1,
+.stSidebar h2,
+.stSidebar h3,
+.stSidebar h4 {
+    color: #dcdcdc;
+}
+
+/* Titles and section headers */
+.stMarkdown h1,
+.stMarkdown h2,
+.stMarkdown h3 {
+    color: #eaeaea;
+    font-weight: bold;
+}
+
+/* Input fields styling */
+.stTextInput > div > label {
+    color: #c9c9c9;
+    font-weight: 500;
+}
+
+.stTextInput input {
+    background-color: #333344;
+    color: #dcdcdc;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.stRadio > label,
+.stButton > button,
+.stFileUploader {
+    color: #dcdcdc;
+}
+
+/* Chat container styling */
+.chat-container {
+    padding: 15px;
+    background-color: #282a36;
+    border: 1px solid #44475a;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.user-message {
+    background-color: #3c4049;
+    border: 1px solid #5a5f73;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #ffffff;
+}
+
+.assistant-message {
+    background-color: #2e323d;
+    border: 1px solid #44475a;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #dcdcdc;
+}
+
+/* Document summary box styling */
+.summary-container {
+    background-color: #282a36;
+    padding: 20px;
+    border: 1px solid #44475a;
+    border-radius: 8px;
+    color: #dcdcdc;
+    margin: 15px 0;
+}
+
+/* Button and label styling */
+.stButton button {
+    background-color: #6272a4;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.stButton button:hover {
+    background-color: #50587a;
+}
+
+/* File uploader styling */
+.stFileUploader {
+    border: 2px dashed #44475a;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background-color: #282a36;
+}
+
+/* Success and error messages */
+.stSuccess {
+    background-color: #2e7d32;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+.stError {
+    background-color: #d32f2f;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+/* Divider styling */
+hr {
+    border: none;
+    border-top: 1px solid #44475a;
+    margin: 20px 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #1e1e2f;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #44475a;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #282a36;
+}
+
+/* Title styling */
+.app-title {
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    background: linear-gradient(90deg, #6272a4 0%, #8be9fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.app-subtitle {
+    text-align: center;
+    color: #bd93f9;
+    font-size: 1.2em;
+    margin-bottom: 40px;
+}

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Body
+from pydantic import BaseModel, ConfigDict
 from typing import List
 import os
 import logging
@@ -7,7 +8,8 @@ import re
 import aiofiles
 from utils.text_processing import extract_text, chunk_text
 from utils.vector_store import store_chunks, search_similar_chunks
-from utils.rag_pipeline import answer_question, summarize_document, generate_queries
+from utils.rag_pipeline import RAGPipeline
+from config.model_config import ModelProvider
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -16,6 +18,22 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 UPLOAD_DIR = "uploads"
+
+# Pydantic models for request bodies
+class DocumentLinkRequest(BaseModel):
+    document_link: str
+    model_config = ConfigDict(protected_namespaces=())
+
+class QuestionRequest(BaseModel):
+    query: str
+    index_path: str
+    model_provider: ModelProvider
+    model_config = ConfigDict(protected_namespaces=())
+
+class SummarizeRequest(BaseModel):
+    index_path: str
+    model_provider: ModelProvider
+    model_config = ConfigDict(protected_namespaces=())
 
 async def save_uploaded_file(file: UploadFile) -> str:
     if not os.path.exists(UPLOAD_DIR):
@@ -60,10 +78,10 @@ async def upload_multiple_documents(files: List[UploadFile] = File(...)):
     return results
 
 @router.post("/process-link")
-async def process_document_link(document_link: str = Body(..., embed=True)):
+async def process_document_link(request: DocumentLinkRequest):
     try:
         # Check if it's an arXiv link
-        arxiv_id_match = document_link.split('/')[-1]
+        arxiv_id_match = request.document_link.split('/')[-1]
         if arxiv_id_match:
             document_link = f"https://arxiv.org/pdf/{arxiv_id_match}.pdf"
 
@@ -84,11 +102,12 @@ async def process_document_link(document_link: str = Body(..., embed=True)):
         raise HTTPException(status_code=500, detail=f"Error processing document link: {str(e)}")
 
 @router.post("/ask")
-async def ask_question(query: str = Body(..., embed=True), index_path: str = Body(..., embed=True)):
+async def ask_question(request: QuestionRequest):
     try:
-        similar_chunks = await search_similar_chunks(query, index_path)
-        answer = await answer_question(query, similar_chunks)
-        return {"query": query, "answer": answer}
+        similar_chunks = await search_similar_chunks(request.query, request.index_path)
+        rag = RAGPipeline(request.model_provider)
+        answer = await rag.answer_question(request.query, similar_chunks)
+        return {"query": request.query, "answer": answer}
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -96,22 +115,18 @@ async def ask_question(query: str = Body(..., embed=True), index_path: str = Bod
         raise HTTPException(status_code=500, detail=f"Error answering question: {str(e)}")
 
 @router.post("/summarize")
-async def summarize_document_route(index_path: str = Body(..., embed=True)):
+async def summarize_document_route(request: SummarizeRequest):
     try:
-        # Generate generic queries for scientific research papers
-        queries = await generate_queries()
+        rag = RAGPipeline(request.model_provider)
+        queries = await rag.generate_queries()
 
-        # Retrieve chunks using multiple queries
         all_chunks = []
         for query in queries:
-            chunks = await search_similar_chunks(query, index_path, k=8)  # Adjust k as needed
+            chunks = await search_similar_chunks(query, request.index_path, k=8)
             all_chunks.extend(chunks)
 
-        # Remove duplicate chunks
         unique_chunks = list({chunk.page_content: chunk for chunk in all_chunks}.values())
-
-        # Summarize the document using the retrieved chunks
-        summary = await summarize_document(unique_chunks)
+        summary = await rag.summarize_document(unique_chunks)
         return {"summary": summary}
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
