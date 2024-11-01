@@ -28,6 +28,15 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan huggingface.co >> ~/.ssh/known_hosts
 
+      - name: Debug SSH setup
+        run: |
+          echo "Checking SSH key permissions and contents of ~/.ssh directory:"
+          ls -la ~/.ssh
+          echo "Contents of known_hosts:"
+          cat ~/.ssh/known_hosts
+          echo "Contents of id_ed25519 key:"
+          cat ~/.ssh/id_ed25519 || echo "Could not read SSH key file"
+
       - name: Push to Hugging Face Spaces
         run: |
           git config --global user.email "shafquat.shayan@gmail.com"
