@@ -1,5 +1,5 @@
 ---
-title: RAG-Based Document Q&A Application
+title: ResearchGPT: AI Research Assistant
 emoji: 🚀
 colorFrom: blue
 colorTo: purple
@@ -10,7 +10,7 @@ pinned: false
 license: mit
 ---
 
-# RAG-Based Document Q&A Application
+# ResearchGPT: AI Research Assistant
 
 This application is a Retrieval-Augmented Generation (RAG) based system that allows users to upload documents or provide links to documents (including arXiv papers), and then ask questions about the content of those documents.
 
@@ -34,29 +34,36 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 ## Setup
 
 1. Clone the repository:
-   ```
+   ```bash
    git clone https://github.com/yourusername/rag-based-qa-app.git
    cd rag-based-qa-app
    ```
 
 2. Install dependencies using Poetry:
-   ```
+   ```bash
    poetry install
    ```
 
 3. Set up environment variables:
-   Create a `.env` file in the root directory and add your OpenAI API key:
+   Create a `.env` file in the root directory:
    ```
-   OPENAI_API_KEY=your_api_key_here
-   ```
-
-4. Run the FastAPI backend:
-   ```
-   poetry run uvicorn main:app --reload
+   OPENAI_API_KEY=your_openai_api_key_here
+   HF_API_KEY=your_huggingface_api_key_here
    ```
 
-5. In a new terminal, run the Streamlit frontend:
+4. Run the application:
+   
+   Option 1: Run both services together:
+   ```bash
+   poetry run start
    ```
+   
+   Option 2: Run services separately:
+   ```bash
+   # Terminal 1 - Backend
+   poetry run python main.py
+   
+   # Terminal 2 - Frontend
    poetry run streamlit run app.py
    ```
 
