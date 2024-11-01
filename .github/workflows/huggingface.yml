@@ -18,18 +18,19 @@ jobs:
           sudo apt-get install git-lfs
           git lfs install
 
-      - name: Push to Hugging Face Spaces
+      - name: Set up SSH key
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SSH_KEY: ${{ secrets.HF_SSH_KEY }}
+        run: |
+          # Set up SSH key
+          mkdir -p ~/.ssh
+          echo "$HF_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan huggingface.co >> ~/.ssh/known_hosts
+
+      - name: Push to Hugging Face Spaces
         run: |
           git config --global user.email "shafquat.shayan@gmail.com"
           git config --global user.name "shayanshafquat"
-          
-          # Set up credential helper to use HF_TOKEN for Hugging Face URL
-          git config --global credential.helper store
-          echo "https://huggingface.co/spaces/neuralnavigators/RAG" > ~/.git-credentials
-          echo "https://${HF_TOKEN}:@huggingface.co/spaces/neuralnavigators/RAG" > ~/.git-credentials
-          
-          # Add the Hugging Face remote and push
-          git remote add hf https://huggingface.co/spaces/neuralnavigators/RAG
+          git remote add hf ssh://git@huggingface.co/spaces/neuralnavigators/RAG
           git push hf main --force
