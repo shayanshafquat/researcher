@@ -9,20 +9,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Git LFS
-      run: |
-        sudo apt-get update
-        sudo apt-get install git-lfs
-        git lfs install
-    
-    - name: Push to Hugging Face Spaces
-      env:
-        HF_TOKEN: ${{ secrets.HF_TOKEN }}
-      run: |
-        git config --global user.email "shafquat.shayan@gmail.com"
-        git config --global user.name "shayanshafquat"
-        git remote add hf https://huggingface.co/spaces/neuralnavigators/RAG
-        git push hf main --force
+      - name: Install Git LFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install git-lfs
+          git lfs install
+
+      - name: Push to Hugging Face Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "shafquat.shayan@gmail.com"
+          git config --global user.name "shayanshafquat"
+          # Add token-based authentication to the Hugging Face remote URL
+          git remote add hf https://huggingface.co/spaces/neuralnavigators/RAG
+          # Set up the URL with your HF_TOKEN for authentication
+          git remote set-url hf https://${HF_TOKEN}@huggingface.co/spaces/neuralnavigators/RAG
+          git push hf main --force
