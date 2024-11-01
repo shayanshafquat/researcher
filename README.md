@@ -12,7 +12,7 @@ license: mit
 
 # ResearchGPT: AI Research Assistant
 
-This application is a Retrieval-Augmented Generation (RAG) based system that allows users to upload documents or provide links to documents (including arXiv papers), and then ask questions about the content of those documents.
+This application is a Retrieval-Augmented Generation (RAG) based system that allows users to upload documents or provide links to documents (including arXiv papers), and then ask questions about the content of those documents. It supports both OpenAI API models and open-source LLMs like Mistral-7B-Instruct, giving users flexibility in choosing their preferred model.
 
 ## Features
 
@@ -20,7 +20,11 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 - Process document links, including arXiv papers
 - Summarize uploaded documents
 - Ask questions about uploaded documents
-- Utilizes OpenAI's GPT model for generating answers
+- Flexible Model Selection:
+  - OpenAI GPT Models: High-performance option using OpenAI's API
+  - Open Source LLMs: Cost-effective alternative using Mistral-7B-Instruct
+- Dynamic model switching without losing context
+- Cached responses for better performance
 
 ## Tech Stack
 
@@ -29,7 +33,21 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 - Langchain: For document processing and vector storage
 - FAISS: Vector database for efficient similarity search
 - OpenAI API: For text embeddings and question answering
+- Hugging Face Hub: For accessing open-source LLMs
 - Poetry: For dependency management
+
+## Model Support
+
+### OpenAI Models
+- Default model: GPT-3.5-turbo
+- Suitable for: Production environments requiring high accuracy
+- Requires: OpenAI API key
+
+### Open Source Models
+- Default model: Mistral-7B-Instruct-v0.2
+- Suitable for: Development, testing, or cost-sensitive deployments
+- Requires: Hugging Face API key
+- Advantages: No usage costs, full control over the model
 
 ## Setup
 
@@ -47,8 +65,8 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 3. Set up environment variables:
    Create a `.env` file in the root directory:
    ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   HF_API_KEY=your_huggingface_api_key_here
+   OPENAI_API_KEY=your_openai_api_key_here  # Required for OpenAI models
+   HF_API_KEY=your_huggingface_api_key_here # Required for Mistral and other open-source models
    ```
 
 4. Run the application:
@@ -67,15 +85,29 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
    poetry run streamlit run app.py
    ```
 
-6. Open your browser and navigate to `http://localhost:8501` to use the application.
-
 ## Usage
 
 1. Upload a document or paste a document link (including arXiv links).
-2. Wait for the document to be processed.
-3. Click on "Summarize Document" to get an overview of the uploaded document.
-4. Ask questions about the document in the provided text input.
-5. View the AI-generated answers based on the document's content.
+2. Select your preferred model provider (OpenAI or Local LLM) from the sidebar.
+3. Wait for the document to be processed.
+4. Click on "Summarize Document" to get an overview of the uploaded document.
+5. Ask questions about the document in the provided text input.
+6. View the AI-generated answers based on the document's content.
+
+## Model Selection Guide
+
+### When to Use OpenAI Models:
+- Need highest accuracy and performance
+- Working with complex academic papers
+- Require production-grade responses
+- Budget allows for API usage
+
+### When to Use Local LLMs (Mistral):
+- Development and testing
+- Cost-sensitive operations
+- Privacy concerns with external APIs
+- Need for offline capabilities
+- Sufficient for basic summarization and Q&A
 
 ## Application Interface
 
@@ -113,7 +145,11 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request. Areas of particular interest include:
+- Adding support for additional open-source models
+- Improving model response caching
+- Enhancing the RAG pipeline
+- UI/UX improvements
 
 ## License
 
