@@ -22,9 +22,9 @@ jobs:
         env:
           HF_SSH_KEY: ${{ secrets.HF_SSH_KEY }}
         run: |
-          # Set up SSH key
+          # Set up SSH key with preserved formatting
           mkdir -p ~/.ssh
-          printf "%s" "$HF_SSH_KEY" > ~/.ssh/id_ed25519
+          echo "$HF_SSH_KEY" | sed 's/\\n/\n/g' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan huggingface.co >> ~/.ssh/known_hosts
 
