@@ -24,8 +24,12 @@ jobs:
         run: |
           git config --global user.email "shafquat.shayan@gmail.com"
           git config --global user.name "shayanshafquat"
-          # Add token-based authentication to the Hugging Face remote URL
+          
+          # Set up credential helper to use HF_TOKEN for Hugging Face URL
+          git config --global credential.helper store
+          echo "https://huggingface.co/spaces/neuralnavigators/RAG" > ~/.git-credentials
+          echo "https://${HF_TOKEN}:@huggingface.co/spaces/neuralnavigators/RAG" > ~/.git-credentials
+          
+          # Add the Hugging Face remote and push
           git remote add hf https://huggingface.co/spaces/neuralnavigators/RAG
-          # Set up the URL with your HF_TOKEN for authentication
-          git remote set-url hf https://${HF_TOKEN}@huggingface.co/spaces/neuralnavigators/RAG
           git push hf main --force
