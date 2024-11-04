@@ -1,13 +1,18 @@
 import os
 from typing import List, Dict
 from langchain.vectorstores import FAISS
-import numpy as np
-from langchain.embeddings import OpenAIEmbeddings
+from langchain.embeddings.openai import OpenAIEmbeddings
 from dotenv import load_dotenv
+import logging
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
+embeddings = OpenAIEmbeddings(
+    openai_api_key=os.getenv("OPENAI_API_KEY"),
+    model="text-embedding-ada-002"
+)
 
 INDEX_DIR = "faiss_indexes"
 
