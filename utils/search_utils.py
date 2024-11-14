@@ -9,14 +9,14 @@ logger = logging.getLogger(__name__)
 class SearchResult:
     def __init__(self, title: str, link: str, snippet: str):
         self.title = title
-        self.link = link
-        self.snippet = snippet
+        self.url = link
+        self.content = snippet
         
     def to_dict(self) -> Dict[str, str]:
         return {
             "title": self.title,
-            "link": self.link,
-            "snippet": self.snippet
+            "url": self.url,
+            "content": self.content
         }
 
 class GoogleSearchTool:

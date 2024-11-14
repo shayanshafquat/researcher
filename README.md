@@ -25,6 +25,7 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
   - Open Source LLMs: Cost-effective alternative using Mistral-7B-Instruct
 - Dynamic model switching without losing context
 - Cached responses for better performance
+- Google Search Integration: Both models can perform web searches for recent or external information
 
 ## Tech Stack
 
@@ -44,7 +45,7 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 - Requires: OpenAI API key
 
 ### Open Source Models
-- Default model: Mistral-7B-Instruct-v0.2
+- Default model: Mistral-7B-Instruct-v0.3
 - Suitable for: Development, testing, or cost-sensitive deployments
 - Requires: Hugging Face API key
 - Advantages: No usage costs, full control over the model
@@ -67,6 +68,8 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
    ```
    OPENAI_API_KEY=your_openai_api_key_here  # Required for OpenAI models
    HF_API_KEY=your_huggingface_api_key_here # Required for Mistral and other open-source models
+   GOOGLE_API_KEY=your_google_api_key_here  # Required for Google Search
+   GOOGLE_CSE_ID=your_google_cse_id_here    # Required for Google Search
    ```
 
 4. Run the application:
@@ -93,6 +96,12 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 4. Click on "Summarize Document" to get an overview of the uploaded document.
 5. Ask questions about the document in the provided text input.
 6. View the AI-generated answers based on the document's content.
+
+## Google Search Integration
+
+Both OpenAI and Mistral models can perform Google searches to find recent or external information when needed. This feature enhances the model's ability to provide up-to-date and comprehensive answers.
+
+![Google Search Integration](images/3.png)
 
 ## Model Selection Guide
 
