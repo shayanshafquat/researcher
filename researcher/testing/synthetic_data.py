@@ -3,8 +3,8 @@ import json
 from pathlib import Path
 import logging
 import asyncio
-from ..core.utils.model_factory import LocalModel
-from ..core.config.model_config import get_model_config
+from researcher.core.utils.model_factory import LocalModel
+from researcher.core.config.model_config import get_model_config
 
 logger = logging.getLogger(__name__)
 
