@@ -2,8 +2,8 @@ import pytest
 import os
 import logging
 from pathlib import Path
-from typing import Generator
 import pymongo
+from typing import Generator
 from dotenv import load_dotenv
 
 # Load test environment variables
@@ -14,7 +14,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('tests/test.log'),
+        logging.FileHandler('test.log'),
         logging.StreamHandler()
     ]
 )
@@ -35,4 +35,4 @@ def test_data_dir() -> Path:
     """Create and return a temporary directory for test data"""
     data_dir = Path("tests/test_data")
     data_dir.mkdir(exist_ok=True)
-    return data_dir 
+    return data_dir
