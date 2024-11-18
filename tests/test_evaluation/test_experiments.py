@@ -60,5 +60,10 @@ def test_experimental_evaluation(test_index):
     assert not results_df.empty
     assert all(all(score >= 0 for score in scores) for scores in results_df['faithfulness_score'])
     
-    # Save results
-    results_df.to_csv('test_evaluation_results.csv', index=False) 
+    # Create results directory if it doesn't exist
+    results_dir = os.path.join("tests", "results")
+    os.makedirs(results_dir, exist_ok=True)
+    
+    # Save results with full path
+    results_path = os.path.join(results_dir, "evaluation_results.csv")
+    results_df.to_csv(results_path, index=False) 

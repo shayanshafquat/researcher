@@ -35,6 +35,10 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --with test
+      
+    # Create results directory
+    - name: Create results directory
+      run: mkdir -p tests/results
         
     - name: Run evaluation tests
       env:
@@ -46,7 +50,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: evaluation-results
-        path: tests/test_evaluation_results.csv
+        path: tests/results/evaluation_results.csv
         
     - name: Comment PR with Results
       if: github.event_name == 'pull_request'
@@ -54,7 +58,7 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const results = fs.readFileSync('tests/test_evaluation_results.csv', 'utf8');
+          const results = fs.readFileSync('tests/results/evaluation_results.csv', 'utf8');
           const resultsTable = results.split('\n')
             .map(line => '| ' + line.split(',').join(' | ') + ' |')
             .join('\n');
