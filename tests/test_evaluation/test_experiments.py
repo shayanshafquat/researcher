@@ -11,7 +11,7 @@ from llama_index.readers.file import PDFReader
 def test_documents():
     """Load a single PDF document from test_data directory"""
     # Specify the exact PDF file path
-    pdf_path = os.path.join("test_data", "papers", "1302.3560v1.pdf")
+    pdf_path = os.path.join("tests", "test_data", "papers", "1302.3560v1.pdf")
     
     if not os.path.exists(pdf_path):
         raise FileNotFoundError(f"PDF file not found at {pdf_path}")
@@ -46,8 +46,7 @@ def test_experimental_evaluation(test_index):
     experiments = setup.get_experiments(test_index)
     
     # Initialize RAGAS evaluator with QA pairs
-    # qa_path = os.path.join("./..", "test_data", "qa_pairs", "1302.3560v1_qa.json")
-    qa_path = "./test_data/qa_pairs/1302.3560v1_qa.json"
+    qa_path = os.path.join("tests", "test_data", "qa_pairs", "1302.3560v1_qa.json")
     evaluator = RAGASEvaluator(qa_path)
     
     # Run evaluation
