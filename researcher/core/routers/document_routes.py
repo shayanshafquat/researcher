@@ -6,10 +6,11 @@ import logging
 import aiohttp
 import re
 import aiofiles
-from utils.text_processing import extract_text, chunk_text
-from utils.vector_store import store_chunks, search_similar_chunks
+from researcher.core.utils.text_processing import extract_text, chunk_text
+from researcher.core.utils.vector_store import store_chunks, search_similar_chunks
 from researcher.core.utils.rag_pipeline import RAGPipeline
 from config.model_config import ModelProvider
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

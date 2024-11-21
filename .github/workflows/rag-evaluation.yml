@@ -54,7 +54,6 @@ jobs:
         name: evaluation-results
         path: tests/results/evaluation_results.csv
         
-    # Comment on pull request with results
     - name: Comment PR with Results
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v6
@@ -62,22 +61,35 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
-          const results = fs.readFileSync('tests/results/evaluation_results.csv', 'utf8');
-          const lines = results.split('\n');
-          const headers = lines[0].split(',');
+          const path = require('path');
+          const csv = require('csv-parser'); // Ensure csv-parser is used for correct parsing
 
-          // Create markdown table
+          const resultsFilePath = path.resolve('tests/results/evaluation_results.csv');
+          const results = [];
+
+          // Parse the CSV file
+          const parseCSV = () =>
+            new Promise((resolve, reject) => {
+              fs.createReadStream(resultsFilePath)
+                .pipe(csv())
+                .on('data', (data) => results.push(data))
+                .on('end', resolve)
+                .on('error', reject);
+            });
+
+          await parseCSV();
+
+          // Construct markdown table
+          const headers = Object.keys(results[0]);
           let tableContent = '| ' + headers.join(' | ') + ' |\n';
           tableContent += '|' + headers.map(() => '---').join('|') + '|\n';
 
-          // Add data rows
-          for (let i = 1; i < lines.length; i++) {
-            if (lines[i].trim()) {
-              tableContent += '| ' + lines[i].split(',').join(' | ') + ' |\n';
-            }
-          }
+          results.forEach((row) => {
+            const rowValues = headers.map((header) => row[header].replace(/[\[\]]/g, '')); // Remove brackets
+            tableContent += '| ' + rowValues.join(' | ') + ' |\n';
+          });
 
-          const comment = `## RAG Evaluation Results\n\n${tableContent}\n[Full Results](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+          const comment = `## RAG Evaluation Results\n\n${tableContent}\n\n[Full Results](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
 
           await github.rest.issues.createComment({
             owner: context.repo.owner,
