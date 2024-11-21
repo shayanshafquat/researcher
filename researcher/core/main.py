@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import document_routes
+from researcher.core.routers import document_routes
 
 app = FastAPI(
     title="ResearchGPT API",

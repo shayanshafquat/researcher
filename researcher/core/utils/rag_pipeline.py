@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional
 from langchain.docstore.document import Document
-from utils.model_factory import ModelFactory, ModelProvider
-from utils.search_utils import GoogleSearchTool, QueryAnalyzer, FunctionRegistry
+from researcher.core.utils.model_factory import ModelFactory, ModelProvider
+from researcher.core.utils.search_utils import GoogleSearchTool, QueryAnalyzer, FunctionRegistry
 import json
 import logging
 

@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional
 import aiohttp
 import logging
-from config.search_config import SEARCH_CONFIG
+from researcher.core.config.search_config import SEARCH_CONFIG
 import json
 
 logger = logging.getLogger(__name__)
