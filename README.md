@@ -29,13 +29,25 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 
 ## Tech Stack
 
+### Core Technologies
 - FastAPI: Backend API framework
 - Streamlit: Frontend user interface
-- Langchain: For document processing and vector storage
+- LlamaIndex: Core RAG implementation and query engines
+- Langchain: Document processing and model integrations
 - FAISS: Vector database for efficient similarity search
 - OpenAI API: For text embeddings and question answering
 - Hugging Face Hub: For accessing open-source LLMs
 - Poetry: For dependency management
+
+### Evaluation & Testing
+- RAGAS: For automated RAG pipeline evaluation
+- Pytest: For testing framework
+- GitHub Actions: For CI/CD and automated evaluation
+
+### Document Processing
+- PyMuPDF: For PDF processing
+- Sentence Transformers: For text embeddings and reranking
+- NLTK: For text processing and tokenization
 
 ## Model Support
 
@@ -49,6 +61,63 @@ This application is a Retrieval-Augmented Generation (RAG) based system that all
 - Suitable for: Development, testing, or cost-sensitive deployments
 - Requires: Hugging Face API key
 - Advantages: No usage costs, full control over the model
+
+## RAG Pipeline Evaluation
+
+### Evaluation Infrastructure
+- Automated evaluation pipeline using GitHub Actions
+- RAGAS metrics for comprehensive assessment
+- Continuous evaluation on pull requests
+- Detailed performance tracking and reporting
+
+### Evaluation Metrics
+
+1. **Faithfulness Score**: Measures how accurately the generated answers reflect the source content
+2. **Answer Relevancy**: Evaluates the semantic relevance of answers to questions
+3. **Context Precision**: Assesses the accuracy of retrieved context
+4. **Context Recall**: Measures the completeness of retrieved relevant information
+
+### Experimental Results
+
+Current evaluation results for different RAG configurations:
+
+| Experiment | Faithfulness | Answer Relevancy | Context Precision | Context Recall |
+|------------|--------------|------------------|-------------------|----------------|
+| Classic VDB + Naive RAG | [1.0, 1.0, 1.0, 1.0] | [0.9806, 0.9933, 0.9985, 0.9718] | [1.0, 0.83, 1.0, 0.8] | [1.0, 1.0, 0.6666, 1.0] |
+| Classic VDB + LLM Rerank | [1.0, 1.0, 1.0, 1.0] | [0.9806, 0.9901, 0.9933, 0.9713] | [1.0, 0.67, 0.67, 0.8] | [1.0, 1.0, 0.6666, 1.0] |
+
+### RAG Configurations Tested
+
+1. **Classic VDB + Naive RAG**
+   - Basic vector database retrieval with top-k=3
+   - Direct question answering with compact response mode
+   - Optimized for speed and simplicity
+   - Shows consistently high faithfulness and answer relevancy
+
+2. **Classic VDB + LLM Rerank**
+   - Enhanced retrieval with top-k=5
+   - Uses cross-encoder model (ms-marco-MiniLM-L-12-v2) for reranking
+   - Improved precision through semantic reranking
+   - Maintains high faithfulness while slightly trading off context precision
+
+2. **MMR (Maximal Marginal Relevance)**
+   - Balances relevance and diversity
+   - Configurable with mmr_threshold=0.7
+
+3. **Advanced Combinations**
+   - Sentence Window Retrieval
+   - Multi-Query Expansion
+   - HyDE + Rerank
+   - Window + HyDE
+
+### Continuous Evaluation Pipeline
+
+Our GitHub Actions workflow automatically:
+- Runs on pull requests to main branch
+- Executes comprehensive RAG evaluations
+- Generates CSV reports with detailed metrics
+- Posts results as PR comments
+- Archives evaluation artifacts
 
 ## Setup
 
@@ -128,13 +197,27 @@ Both OpenAI and Mistral models can perform Google searches to find recent or ext
 
 ## Project Structure
 
-- `main.py`: FastAPI application entry point
-- `app.py`: Streamlit frontend
-- `routers/document_routes.py`: API routes for document processing and Q&A
-- `utils/`:
-  - `vector_store.py`: FAISS vector store operations
-  - `rag_pipeline.py`: Question answering logic
-  - `text_processing.py`: Text extraction and chunking
+```
+researcher/
+├── core/
+│   ├── config/
+│   │   └── model_config.py    # Model configurations
+│   ├── routers/
+│   │   └── document_routes.py # API endpoints
+│   └── utils/
+│       ├── vector_store.py    # FAISS operations
+│       ├── rag_pipeline.py    # RAG implementation
+│       └── text_processing.py # Text processing
+├── testing/
+│   └── data_preparation.py    # Test data generation
+└── tests/
+    ├── evaluation/
+    │   └── ragas_evaluator.py # RAGAS evaluation
+    ├── config/
+    │   └── test_config.py     # Test configurations
+    └── test_evaluation/
+        └── test_experiments.py # Evaluation tests
+```
 
 ## Running with Docker
 
@@ -159,6 +242,10 @@ Contributions are welcome! Please feel free to submit a Pull Request. Areas of p
 - Improving model response caching
 - Enhancing the RAG pipeline
 - UI/UX improvements
+- Adding new RAG configurations for evaluation
+- Improving evaluation metrics and benchmarks
+- Enhancing the RAGAS evaluation pipeline
+- Optimizing retrieval strategies based on evaluation results
 
 ## License
 
