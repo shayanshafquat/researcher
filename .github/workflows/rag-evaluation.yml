@@ -56,25 +56,34 @@ jobs:
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v6
       with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
-          const results = fs.readFileSync('tests/results/evaluation_results.csv', 'utf8');
-          const resultsTable = results.split('\n')
-            .map(line => '| ' + line.split(',').join(' | ') + ' |')
-            .join('\n');
-          
-          const comment = `## RAG Evaluation Results
-          
-          | Experiment | Faithfulness | Answer Relevancy | Context Precision | Context Recall |
-          |------------|--------------|------------------|-------------------|----------------|
-          ${resultsTable}
-          
-          [Full Results](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})
-          `;
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.name,
-            body: comment
-          });
+          try {
+            const results = fs.readFileSync('tests/results/evaluation_results.csv', 'utf8');
+            const lines = results.split('\n');
+            const headers = lines[0].split(',');
+            
+            // Create markdown table
+            let tableContent = '| ' + headers.join(' | ') + ' |\n';
+            tableContent += '|' + headers.map(() => '---').join('|') + '|\n';
+            
+            // Add data rows
+            for (let i = 1; i < lines.length; i++) {
+              if (lines[i].trim()) {
+                tableContent += '| ' + lines[i].split(',').join(' | ') + ' |\n';
+              }
+            }
+            
+            const comment = `## RAG Evaluation Results\n\n${tableContent}\n[Full Results](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+          } catch (error) {
+            console.error('Error processing results:', error);
+            core.setFailed(error.message);
+          }
