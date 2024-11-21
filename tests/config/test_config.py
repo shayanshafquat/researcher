@@ -9,6 +9,8 @@ from llama_index.core.query_engine import MultiStepQueryEngine
 from llama_index.llms.openai import OpenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
 from researcher.core.config.model_config import ModelConfig, ModelProvider
+from llama_index.core.response_synthesizers import ResponseMode
+from llama_index.core import get_response_synthesizer
 
 class ExperimentalSetup:
     def __init__(self):
@@ -26,10 +28,14 @@ class ExperimentalSetup:
             model="cross-encoder/ms-marco-MiniLM-L-12-v2", 
             top_n=2
         )
+        response_synthesizer = get_response_synthesizer(
+            response_mode=ResponseMode.COMPACT
+        )
         return RetrieverQueryEngine(
             retriever=retriever, 
             node_postprocessors=[rerank],
-            response_mode="compact"
+            response_synthesizer=response_synthesizer
+
         )
 
     def setup_hyde(self, index: VectorStoreIndex) -> BaseQueryEngine:
@@ -108,8 +114,8 @@ class ExperimentalSetup:
 
     def get_experiments(self, index: VectorStoreIndex) -> Dict[str, BaseQueryEngine]:
         return {
-            "Classic VDB + Naive RAG": self.setup_naive_rag(index)
-            # "Classic VDB + LLM Rerank": self.setup_llm_rerank(index),
+            "Classic VDB + Naive RAG": self.setup_naive_rag(index),
+            "Classic VDB + LLM Rerank": self.setup_llm_rerank(index)
             # "Classic VDB + HyDE": self.setup_hyde(index)
             # "Classic VDB + HyDE + LLM Rerank": self.setup_hyde_with_rerank(index),
             # "Classic VDB + MMR": self.setup_mmr(index)
