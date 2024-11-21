@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 import os
 from openai import AsyncOpenAI
 from huggingface_hub import InferenceClient
+from config.model_config import ModelProvider, get_model_config
 from typing import List, Dict
 import json
 import logging
-from researcher.core.config.model_config import ModelProvider, get_model_config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

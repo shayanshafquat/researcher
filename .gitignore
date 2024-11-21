@@ -1,64 +1,9 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-dist/
-
-
-# Virtual Environment
-.env
-.venv
-env/
-venv/
-ENV/
-
-# IDE
-.vscode/
-*.swp
-*.swo
-
-# Project specific
+/dist
+chat.md
+chat.cursor_rules
 uploads/
-notebooks/
-faiss_indexes/
+.env
+notebooks
 faiss_index.bin
-
-# Test specific
-tests/test_data/papers/*
-# tests/test_data/qa_pairs/*
-# tests/test_data/papers_cache.json
-# tests/test_data/qa_cache.json
-tests/test.log
-.pytest_cache/
-
-# Keep test directory structure
-# !tests/test_data/papers/.gitkeep
-# !tests/test_data/qa_pairs/.gitkeep
-
-# Large files
-*.pdf
-*.bin
-*.pt
-*.pth
-*.model
-
-# Data files
-*.json
-!pyproject.json
-!package.json
-!**/config/*.json
-*.csv
-*.xlsx
-*.db
-*.sqlite3
-
-# Logs
-*.log
-logs/
-
-# OS generated files
-
+faiss_indexes/
 
