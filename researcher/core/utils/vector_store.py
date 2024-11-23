@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict
-from langchain.vectorstores import FAISS
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import logging
 
@@ -42,6 +42,10 @@ async def search_similar_chunks(query: str, index_path: str, k: int = 5):
     if not os.path.exists(index_path):
         raise FileNotFoundError(f"No index found at {index_path}. Please upload a document first.")
     
-    index = FAISS.load_local(index_path, embeddings)
+    index = FAISS.load_local(
+        index_path,
+        embeddings,
+        allow_dangerous_deserialization=True
+    )
     similar_chunks = index.similarity_search(query, k=k)
     return similar_chunks
